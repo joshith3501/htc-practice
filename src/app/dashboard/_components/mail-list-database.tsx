@@ -1,37 +1,33 @@
-import { ComponentProps } from "react";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Mail } from "../data";
-import { useMail } from "../use-mail";
+import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
+import React from "react";
 
-// interface DataProps {
-//   id: string;
-//   patientAddress: string;
-//   doctorAddress: string;
-//   guardianAddress: string;
-//   treatmentDetails: string;
-//   createdAt: Date;
-//   published: boolean;
-//   archived: boolean;
-// }
-type DataProps = Array<Array<any>>;
-
-interface MailListProps {
-  items: DataProps;
-  handleRecordClick: (data:string,type:string)=>void
+interface UserApprovalTreatmentData {
+  id: string;
+  patientAddress: string;
+  doctorAddress: string;
+  guardianAddress: string;
+  treatmentDetails: string;
+  treatmentTitle: string;
+  createdAt: Date;
+  published: boolean;
+  archived: boolean;
 }
 
-export function MailList({ items,handleRecordClick }: MailListProps) {
-  const [mail, setMail] = useMail();
+interface MailListDatabaseProps {
+  treatments: UserApprovalTreatmentData[] | undefined;
+  handleRecordClick: (data: any, type: string) => void;
+}
 
+const MailListDatabase = ({
+  treatments,
+  handleRecordClick,
+}: MailListDatabaseProps) => {
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
-        {items.map((item, index) => (
+        {treatments?.map((treatment, index) => (
           <button
             key={index}
             className={cn(
@@ -44,33 +40,38 @@ export function MailList({ items,handleRecordClick }: MailListProps) {
             //     selected: item[0],
             //   })
             // }
-            onClick={()=>handleRecordClick('some data','current')}
+            onClick={() => handleRecordClick(treatment, "approvals")}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
                 <div className="flex items-center gap-2">
-                  <div className="font-semibold">{item[3]}</div>
+                  <div className="font-semibold">
+                    {treatment.treatmentTitle}
+                  </div>
                   {/* {!item.read && (
                     <span className="flex h-2 w-2 rounded-full bg-blue-600" />
                   )} */}
                 </div>
-                <div
+                {/* <div
                   className={cn(
                     "ml-auto text-xs",
                     mail.selected === item[0]
                       ? "text-foreground"
                       : "text-muted-foreground"
                   )}
-                >
-                  {/* {formatDistanceToNow(new Date(item.date), {
+                > */}
+                <div className={cn("ml-auto text-xs", "text-foreground")}>
+                  {formatDistanceToNow(new Date(treatment.createdAt), {
                     addSuffix: true,
-                  })} */}
+                  })}
                 </div>
               </div>
-              <div className="text-xs font-medium">{item[2]}</div>
+              <div className="text-xs font-medium">
+                for patient: {treatment.patientAddress}
+              </div>
             </div>
             <div className="line-clamp-2 text-xs text-muted-foreground">
-              {item[4].substring(0, 300)}
+              by doctor: {treatment.doctorAddress}
             </div>
             {/* {item.labels.length ? (
               <div className="flex items-center gap-2">
@@ -86,18 +87,6 @@ export function MailList({ items,handleRecordClick }: MailListProps) {
       </div>
     </ScrollArea>
   );
-}
+};
 
-function getBadgeVariantFromLabel(
-  label: string
-): ComponentProps<typeof Badge>["variant"] {
-  if (["work"].includes(label.toLowerCase())) {
-    return "default";
-  }
-
-  if (["personal"].includes(label.toLowerCase())) {
-    return "outline";
-  }
-
-  return "secondary";
-}
+export default MailListDatabase;

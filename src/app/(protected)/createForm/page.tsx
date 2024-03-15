@@ -1,7 +1,17 @@
 "use client";
 import CardWrapper from "@/components/auth/card-wrapper";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
+// import {
+//   TextField,
+//   Button as MuiButton,
+//   Container,
+//   Typography,
+//   Grid,
+//   TextareaAutosize,
+//   InputLabel,
+// } from "@mui/material";
 
 import {
   Form,
@@ -28,6 +38,135 @@ import { db } from "@/lib/db";
 import { getCurrentAddress } from "@/actions/getaddress";
 // import router from "next/router";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+
+
+const createForm = () => {
+
+  const session = useSession();
+  const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [formData, setFormData] = useState({
+    patientAddress: "",
+    guardianAddress: "",
+    treatmentTitle: "",
+    treatmentDetails: "",
+    treatmentCourse: "",
+  });
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsDisabled(true);
+    const data = {...formData, treatmentCourse: formData.treatmentCourse.split(',')}
+    const metamaskAddress = await getCurrentAddress(
+      session.data?.user
+    );
+    
+    metamaskAddress && createtreatment(data, metamaskAddress);
+
+    router.push("/dashboard");
+
+  };
+
+  useEffect(()=>{
+    setIsDisabled(false);
+  },[]);
+
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <Card className="w-[1200px] ">
+        <CardHeader>
+          <Header label="Add Treatment" />
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-4">
+              <div className="flex space-x-8 mb-2">
+          
+                <div className="flex flex-col space-y-2 flex-1">
+                  <Label htmlFor="patientAddress">Add patient Address</Label>
+                  <Input
+                    name="patientAddress"
+                    id="patientAddress"
+                    placeholder="0x9fc3g....."
+                    type="text"
+                    onChange={handleChange}
+                    className="w-full"
+                  />
+                </div>
+
+                
+                <div className="flex flex-col space-y-2 flex-1">
+                  <Label htmlFor="guardianAddress">Add guardian Address</Label>
+                  <Input
+                    name="guardianAddress"
+                    id="guardianAddress"
+                    placeholder="0x9fc3g....."
+                    type="text"
+                    onChange={handleChange}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              <Label htmlFor="treatmentTitle">Add Treatment Title</Label>
+              <Input
+                id="treatmentTitle"
+                name="treatmentTitle"
+                placeholder="Add the title of the problem of patient"
+                onChange={handleChange}
+                // className="w-[100px]"
+              />
+
+            
+              <Label htmlFor="treatmentDetails">Add Treatment Detail</Label>
+              <Textarea
+                id="treatmentDetails"
+                name="treatmentDetails"
+                placeholder="Add the treatment Details"
+                onChange={handleChange}
+                className="h-[100px]"
+              />
+
+              <Label htmlFor="treatmentCourse">Add Treatment Course</Label>
+              <Textarea
+                id="treatmentCourse"
+                name="treatmentCourse"
+                placeholder="Add course medicine separated by commas"
+                onChange={handleChange}
+                className="h-[100px]"
+              />
+            </div>
+            <div className="flex w-full justify-between space-x-10">
+              <Button variant="destructive" className="flex-1 cursor-pointer">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="secondary"
+                className="flex-1 cursor-pointer"
+                disabled={isDisabled}
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default createForm;
+
+
 
 // const createForm = () => {
 //   const form = useForm<z.infer<typeof TreatmentScheme>>({
@@ -156,9 +295,3 @@ import { useRouter } from "next/navigation";
 //     </div>
 //   );
 // };
-
-const createForm= () => {
-  
-}
-
-export default createForm;

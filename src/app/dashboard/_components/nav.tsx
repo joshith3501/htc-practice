@@ -19,11 +19,12 @@ interface NavProps {
     href: string;
     icon: LucideIcon;
     // variant: "default" | "ghost";
-    variant : string;
+    variant: string;
   }[];
+  handleNavClicks?: (title: String) => void;
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function Nav({ links, isCollapsed, handleNavClicks }: NavProps) {
   return (
     <div
       data-collapsed={isCollapsed}
@@ -35,14 +36,14 @@ export function Nav({ links, isCollapsed }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  href={link.href}
+                  href={"#"}
                   className={cn(
-                    buttonVariants({ variant: "ghost", size: "icon" }),
+                    buttonVariants({ variant: "ghost", size: "icon" })
                     // "h-9 w-9",
                     // link.variant === "default" //&&
-                      // "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                    // "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                   )}
-                  
+                  onClick={() => handleNavClicks!(link?.title)}
                 >
                   <link.icon className="h-4 w-4" />
                   <span className="sr-only">{link.title} </span>
@@ -60,13 +61,14 @@ export function Nav({ links, isCollapsed }: NavProps) {
           ) : (
             <Link
               key={index}
-              href={link.href}
+              href={"#"}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
                 // link.variant === "default" &&
                 //   "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                 "justify-start"
               )}
+              onClick={() => handleNavClicks!(link?.title)}
             >
               <link.icon className="mr-2 h-4 w-4" />
 

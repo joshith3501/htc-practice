@@ -30,7 +30,9 @@ model Treatment {
   patientAddress String 
   doctorAddress String
   guardianAddress String
+  treatmentTitle String
   treatmentDetails String
+  treatmentCourse String[]
   createdAt DateTime @default(now())
   published Boolean @default(false)
   archived Boolean @default(false)

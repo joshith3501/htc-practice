@@ -47,6 +47,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 
 import { ethers } from "ethers";
+import UserApprovalsTab from "./userApprovalsTab";
 
 // interface DataProps {
 //   id: string;
@@ -70,6 +71,17 @@ interface MailProps {
   navCollapsedSize: number;
 }
 
+interface IMail {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  text: string;
+  date: string;
+  read: boolean;
+  labels: string[];
+}
+
 export function Mail({
   mails,
   role,
@@ -80,6 +92,9 @@ export function Mail({
 }: MailProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [mail] = useMail();
+  const [status, setStatus] = React.useState<String>("Current");
+  const [currentMail, setCurrentMail] = React.useState<IMail>();
+  const [currentType, setCurrentType] = React.useState("approvals");
 
   // const getComponent = () => {
   //   // if (role === "DOCTOR") {
@@ -90,9 +105,80 @@ export function Mail({
 
   // getComponent();
 
-  const handleNavLink = (name:String)=>{
+  const handleMailRecordClick = (data:any,type:string)=>{
+    if (type === "approvals") {
+      setCurrentMail( {
+        id: data.id,
+        name: data.patientAddress,
+        email: data.doctorAddress,
+        subject: data.guardianAddress,
+        text: data.treatmentDetails,
+        date: data.createdAt,
+        read: false,
+        labels: [""],
+      });
 
+      setCurrentType("approvals");
+    }
   }
+
+  const getTabs = () => {
+    return (
+      <Tabs defaultValue="all">
+        <div className="flex items-center px-4 py-2">
+          <h1 className="text-xl font-bold">Inbox</h1>
+          {/* <TabsList className="ml-auto">
+                <TabsTrigger
+                  value="all"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  All mail
+                </TabsTrigger>
+                <TabsTrigger
+                  value="unread"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  Unread
+                </TabsTrigger>
+              </TabsList> */}
+        </div>
+        <Separator />
+        <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <form>
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Search" className="pl-8" />
+            </div>
+          </form>
+        </div>
+        <TabsContent value="all" className="m-0">
+          <MailList items={mails} handleRecordClick={handleMailRecordClick} />
+        </TabsContent>
+        {/* <TabsContent value="unread" className="m-0">
+          <MailList items={mails.filter((item) => !item.read)} />
+          <MailList items={mails} />
+        </TabsContent> */}
+      </Tabs>
+    );
+  };
+  const getComponent = () => {
+    switch (status) {
+      case "Current":
+        return getTabs();
+      case "Approvals":
+        return <UserApprovalsTab handleRecordClick={handleMailRecordClick}/>;
+      case "Approved":
+        return <Tabs>Approved</Tabs>;
+      case "Archive":
+        return <Tabs>Archives</Tabs>;
+      default:
+        return null;
+    }
+  };
+
+  const handleNavLink = (name: String) => {
+    setStatus(name);
+  };
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -186,7 +272,7 @@ export function Mail({
                     <Link
                       href="/createForm"
                       className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        buttonVariants({ variant: "default", size: "icon" }),
                         // "h-9 w-9",
                         // link.variant === "default" //&&
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
@@ -207,7 +293,7 @@ export function Mail({
                 <Link
                   href="/createForm"
                   className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
+                    buttonVariants({ variant: "default", size: "sm" }),
                     // link.variant === "default" &&
                     //   "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                     "justify-start"
@@ -221,6 +307,7 @@ export function Mail({
           <Nav
             isCollapsed={isCollapsed}
             links={role === '"USER"' ? userNav : DoctorNav}
+            handleNavClicks={handleNavLink}
           />
           <Separator />
           <Nav
@@ -232,71 +319,22 @@ export function Mail({
                 icon: Earth,
                 variant: "ghost",
               },
-              // {
-              //   title: "Issues",
-              //   label: "128",
-              //   icon: MessagesSquare,
-              //   variant: "ghost",
-              // },
-              // {
-              //   title: "Requests",
-              //   label: "8",
-              //   icon: ShoppingCart,
-              //   variant: "ghost",
-              // },
-              // {
-              //   title: "Promotions",
-              //   label: "21",
-              //   icon: Archive,
-              //   variant: "ghost",
-              // },
             ]}
           />
           {/* <Link href="/dashboard/global" buttonVariant({variant: "ghost"})>global</Link> */}
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <Tabs defaultValue="all">
-            <div className="flex items-center px-4 py-2">
-              <h1 className="text-xl font-bold">Inbox</h1>
-              {/* <TabsList className="ml-auto">
-                <TabsTrigger
-                  value="all"
-                  className="text-zinc-600 dark:text-zinc-200"
-                >
-                  All mail
-                </TabsTrigger>
-                <TabsTrigger
-                  value="unread"
-                  className="text-zinc-600 dark:text-zinc-200"
-                >
-                  Unread
-                </TabsTrigger>
-              </TabsList> */}
-            </div>
-            <Separator />
-            <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <form>
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search" className="pl-8" />
-                </div>
-              </form>
-            </div>
-            <TabsContent value="all" className="m-0">
-              <MailList items={mails} />
-            </TabsContent>
-            <TabsContent value="unread" className="m-0">
-              {/* <MailList items={mails.filter((item) => !item.read)} /> */}
-              <MailList items={mails} />
-            </TabsContent>
-          </Tabs>
+          {getComponent()}
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>
           {/* <MailDisplay
             mail={mails.find((item) => item.id === mail.selected) || null}
           /> */}
+          <MailDisplay
+            mail={currentMail || null}
+          />
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>
