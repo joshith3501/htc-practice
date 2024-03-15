@@ -1,0 +1,216 @@
+/* .homepage {
+  background: black;
+  color: white;
+} */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.logo {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo div {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  height: 30px;
+  width: 30px;
+}
+
+.referenceLinks {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.referenceLinks > div {
+  padding-inline: 1.2rem;
+  font-size: 13px;
+  color: #b4b4b4;
+  cursor: pointer;
+}
+
+.referenceLinks > .resource {
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.buttons > div {
+  padding: 10px;
+}
+
+.getStarted {
+  margin: auto 2rem;
+  border-radius: 2rem;
+  background-color: #276df1;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.getStarted button {
+  display: flex;
+  align-items: center;
+  padding-inline: 0.7rem;
+}
+
+.getStarted button span {
+  margin-right: 1rem;
+}
+
+.getStarted:hover {
+  background-color: #1d54b7;
+  color: #e0e0e0;
+}
+
+.intro {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.about {
+  flex: 7;
+}
+
+.title {
+  font-size: 18px;
+  color: #b4b4b4;
+}
+
+.info {
+  font-size: 2.5rem;
+  padding-block: 2rem;
+  word-spacing: 2px;
+}
+
+.infoLogo {
+  display: inline-block;
+  margin: auto 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.info span {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 600;
+}
+
+.caseStudy > button {
+  border: 2px solid white;
+  border-radius: 1.5rem;
+  /* font-size: 12px; */
+  padding: 9px 22px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.caseStudy > button > span {
+  margin-right: 1rem;
+  font-size: 17px;
+}
+
+.introImg {
+  flex: 2;
+}
+
+.introImage {
+  border-radius: 2rem;
+  /* border: 1px solid white; */
+}
+
+.userCards {
+  display: flex;
+  justify-content: center;
+}
+
+.userCards > div {
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  margin-inline: 1rem;
+  margin-top: 5rem;
+  padding-block: 1.3rem;
+  padding-inline: 1.5rem;
+  width: 15rem;
+  height: 18rem;
+  border-radius: 8px;
+  transition: linear 0.3s;
+}
+
+.cardLogo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userIcon {
+  background-color: #262626;
+  padding: 0.7rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  transition: ease-in-out 0.2s;
+}
+
+.hospitalLogo {
+  font-size: 1.3rem;
+}
+
+.userCards > .patient:hover,
+.userCards > .doctor:hover,
+.userCards > .hospital:hover {
+  margin-top: 0rem;
+  background-color: #256bef;
+}
+
+.userCards > div:hover .userIcon {
+  background-color: #4b91ff;
+}
+
+.userCards > div:hover .userType {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.userInfo {
+  padding-top: 3rem;
+  font-size: 18px;
+  /* font-weight: bold;  */
+  font-family: "Roboto";
+}
+
+.userType {
+  color: #808080;
+}
+
+.userReg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.userRegLink {
+  text-align: center;
+  padding: 0.5rem 1.5rem;
+  border-radius: 2rem;
+}
+
+.userCards > div:hover .userRegLink {
+  background-color: #5697f9;
+  color: #e0e0e0;
+}
