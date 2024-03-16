@@ -38,6 +38,11 @@ model Treatment {
   archived Boolean @default(false)
 }
 
+model Hashes {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  treatmentHash String @unique
+}
+
 
 
 enum Status {

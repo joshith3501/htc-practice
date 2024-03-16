@@ -24,7 +24,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { DoctorNav, userNav } from "@/lib/roleBasedNav";
 
 import { AccountSwitcher } from "./account-switcher";
@@ -80,6 +80,8 @@ interface IMail {
   date: string;
   read: boolean;
   labels: string[];
+  treatmentTitle?: string;
+  treatmentCourse?: string;
 }
 
 export function Mail({
@@ -94,7 +96,7 @@ export function Mail({
   const [mail] = useMail();
   const [status, setStatus] = React.useState<String>("Current");
   const [currentMail, setCurrentMail] = React.useState<IMail>();
-  const [currentType, setCurrentType] = React.useState("approvals");
+  const [currentType, setCurrentType] = React.useState("");
 
   // const getComponent = () => {
   //   // if (role === "DOCTOR") {
@@ -105,14 +107,16 @@ export function Mail({
 
   // getComponent();
 
-  const handleMailRecordClick = (data:any,type:string)=>{
+  const handleMailRecordClick = (data: any, type: string) => {
     if (type === "approvals") {
-      setCurrentMail( {
+      setCurrentMail({
         id: data.id,
         name: data.patientAddress,
         email: data.doctorAddress,
         subject: data.guardianAddress,
         text: data.treatmentDetails,
+        treatmentCourse: data.treatmentCourse,
+        treatmentTitle: data.treatmentTitle,
         date: data.createdAt,
         read: false,
         labels: [""],
@@ -120,7 +124,7 @@ export function Mail({
 
       setCurrentType("approvals");
     }
-  }
+  };
 
   const getTabs = () => {
     return (
@@ -166,7 +170,7 @@ export function Mail({
       case "Current":
         return getTabs();
       case "Approvals":
-        return <UserApprovalsTab handleRecordClick={handleMailRecordClick}/>;
+        return <UserApprovalsTab handleRecordClick={handleMailRecordClick} />;
       case "Approved":
         return <Tabs>Approved</Tabs>;
       case "Archive":
@@ -332,10 +336,9 @@ export function Mail({
           {/* <MailDisplay
             mail={mails.find((item) => item.id === mail.selected) || null}
           /> */}
-          <MailDisplay
-            mail={currentMail || null}
-          />
+          <MailDisplay mail={currentMail || null} currentType={currentType}/>
         </ResizablePanel>
+        {/* <Button>Accept</Button> */}
       </ResizablePanelGroup>
     </TooltipProvider>
   );
