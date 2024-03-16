@@ -28,7 +28,7 @@ const mainNav = () => {
 
   return (
     <nav className="flex justify-between items-center h-14 pr-4 w-full bg-navbg z-1000">
-      <Link href="/mail">
+      <Link href="/dashboard">
         <button className="rounded text-sm px-2.5 py-0.5 ml-4 pb-1 bg-navbtn hover:bg-navbgLight text-zinc-200 hover:text-white">
           Home
         </button>
@@ -54,10 +54,11 @@ const mainNav = () => {
             variant="ghost"
             size="icon"
             // disabled={!mail}
+            className="w-[100px]"
           >
-            <div>
+            <div className="flex flex-row space-x-1">
               <CircleUserRound />
-              {user?.name}
+              <div>{user?.name}</div>
             </div>
             <span className="sr-only">{/* {session} */}</span>
           </Button>

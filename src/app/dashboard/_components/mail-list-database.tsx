@@ -10,6 +10,7 @@ interface UserApprovalTreatmentData {
   guardianAddress: string;
   treatmentDetails: string;
   treatmentTitle: string;
+  treatmentCourse: string[];
   createdAt: Date;
   published: boolean;
   archived: boolean;

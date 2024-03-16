@@ -1,4 +1,5 @@
-import { ComponentProps } from "react";
+"use client";
+import { ComponentProps, useEffect, useState } from "react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 import { cn } from "@/lib/utils";
@@ -22,11 +23,26 @@ type DataProps = Array<Array<any>>;
 
 interface MailListProps {
   items: DataProps;
-  handleRecordClick: (data:string,type:string)=>void
+  handleRecordClick: (data: string, type: string) => void;
+  tabs: String;
 }
 
-export function MailList({ items,handleRecordClick }: MailListProps) {
+export function MailList({ items, handleRecordClick, tabs }: MailListProps) {
+  // const [currentItems, setCurrentItems] = React.setState(items);
   const [mail, setMail] = useMail();
+  const [currentItems, setCurrentItems] = useState<DataProps>();
+
+  useEffect(() => {
+    const getCurrentData = async () => {};
+    console.log("tabs", tabs);
+
+    switch (tabs) {
+      case "Current":
+        console.log("current items", items[0]);
+      case "Approved":
+        console.log("current items", items[0]);
+    }
+  }, [tabs]);
 
   return (
     <ScrollArea className="h-screen">
@@ -44,7 +60,7 @@ export function MailList({ items,handleRecordClick }: MailListProps) {
             //     selected: item[0],
             //   })
             // }
-            onClick={()=>handleRecordClick('some data','current')}
+            onClick={() => handleRecordClick("some data", "current")}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -57,9 +73,10 @@ export function MailList({ items,handleRecordClick }: MailListProps) {
                 <div
                   className={cn(
                     "ml-auto text-xs",
-                    mail.selected === item[0]
-                      ? "text-foreground"
-                      : "text-muted-foreground"
+                    // mail.selected === item[0]
+                    //   ?
+                    "text-foreground"
+                    // : "text-muted-foreground"
                   )}
                 >
                   {/* {formatDistanceToNow(new Date(item.date), {
@@ -88,16 +105,16 @@ export function MailList({ items,handleRecordClick }: MailListProps) {
   );
 }
 
-function getBadgeVariantFromLabel(
-  label: string
-): ComponentProps<typeof Badge>["variant"] {
-  if (["work"].includes(label.toLowerCase())) {
-    return "default";
-  }
+// function getBadgeVariantFromLabel(
+//   label: string
+// ): ComponentProps<typeof Badge>["variant"] {
+//   if (["work"].includes(label.toLowerCase())) {
+//     return "default";
+//   }
 
-  if (["personal"].includes(label.toLowerCase())) {
-    return "outline";
-  }
+//   if (["personal"].includes(label.toLowerCase())) {
+//     return "outline";
+//   }
 
-  return "secondary";
-}
+//   return "secondary";
+// }

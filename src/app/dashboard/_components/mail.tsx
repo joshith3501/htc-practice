@@ -93,9 +93,9 @@ export function Mail({
   navCollapsedSize,
 }: MailProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [mail] = useMail();
+  // const [mail] = useMail();
   const [status, setStatus] = React.useState<String>("Current");
-  const [currentMail, setCurrentMail] = React.useState<IMail>();
+  const [currentMail, setCurrentMail] = React.useState<IMail | any>();
   const [currentType, setCurrentType] = React.useState("");
 
   // const getComponent = () => {
@@ -123,14 +123,17 @@ export function Mail({
       });
 
       setCurrentType("approvals");
+    } else {
+      //define data as above 
+      setCurrentMail(data);
     }
   };
 
-  const getTabs = () => {
+  const getTabs = (tab: string) => {
     return (
       <Tabs defaultValue="all">
         <div className="flex items-center px-4 py-2">
-          <h1 className="text-xl font-bold">Inbox</h1>
+          <h1 className="text-xl font-bold">Records</h1>
           {/* <TabsList className="ml-auto">
                 <TabsTrigger
                   value="all"
@@ -147,16 +150,16 @@ export function Mail({
               </TabsList> */}
         </div>
         <Separator />
-        <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        {/* <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <form>
             <div className="relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search" className="pl-8" />
             </div>
           </form>
-        </div>
+        </div> */}
         <TabsContent value="all" className="m-0">
-          <MailList items={mails} handleRecordClick={handleMailRecordClick} />
+          <MailList items={mails} tabs={status} handleRecordClick={handleMailRecordClick} />
         </TabsContent>
         {/* <TabsContent value="unread" className="m-0">
           <MailList items={mails.filter((item) => !item.read)} />
@@ -168,13 +171,15 @@ export function Mail({
   const getComponent = () => {
     switch (status) {
       case "Current":
-        return getTabs();
+        return getTabs("current");
       case "Approvals":
         return <UserApprovalsTab handleRecordClick={handleMailRecordClick} />;
       case "Approved":
         return <Tabs>Approved</Tabs>;
       case "Archive":
         return <Tabs>Archives</Tabs>;
+      case "Pending":
+        return <Tabs>Pending</Tabs>
       default:
         return null;
     }

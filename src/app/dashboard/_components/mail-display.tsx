@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import addDays from "date-fns/addDays";
 import addHours from "date-fns/addHours";
 import format from "date-fns/format";
@@ -57,7 +57,7 @@ interface IMail {
   read: boolean;
   labels: string[];
   treatmentTitle?: string;
-  treatmentCourse?: string;
+  treatmentCourse?: any;
 }
 
 interface MailDisplayProps {
@@ -96,20 +96,22 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
       mail?.treatmentCourse
     );
 
-    const tx =await transactionHash.wait();
+    const tx = await transactionHash.wait();
 
-    addTreatmentToBlockchain(mail, JSON.stringify(tx)).then((data)=>{
+    addTreatmentToBlockchain(mail, JSON.stringify(tx)).then((data) => {
       console.log(data);
     });
     console.log(mail);
     setIsLoading(false);
 
-    await router.reload();
+    // await router.reload();
   };
 
-  return (
+  console.log(mail?.treatmentCourse);
 
-    isLoading ? (<div> Transaction Processing</div>) : (
+  return isLoading ? (
+    <div> Transaction Processing</div>
+  ) : (
     <div className="flex h-full flex-col">
       {currentType !== "approvals" && (
         <div className="flex items-center p-2">
@@ -256,10 +258,13 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
                 </AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
-                <div className="font-semibold">{mail.name}</div>
-                <div className="line-clamp-1 text-xs">{mail.subject}</div>
+                <div className="font-semibold">{mail.treatmentTitle}</div>
                 <div className="line-clamp-1 text-xs">
-                  <span className="font-medium">Reply-To:</span> {mail.email}
+                  Patient Address:- {mail.name}
+                </div>
+                <div className="line-clamp-1 text-xs">
+                  <span className="font-medium">Acting Doctor:- </span>
+                  {mail.email}
                 </div>
               </div>
             </div>
@@ -268,9 +273,27 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
             )}
           </div>
           <Separator />
+          <div className="p-4 text-xl">
+            <h1 className="font-bold">Treatment Impressions</h1>
+          </div>
+          <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
             {mail.text}
           </div>
+          <Separator />
+          <div className="p-4 text-xl">
+            <h1 className="font-bold">Suggested Course</h1>
+          </div>
+          <Separator />
+          <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
+            {mail.treatmentCourse.map((item:any) => {
+                return <div>{item}</div>
+            })}
+            {console.log(mail.treatmentCourse)}
+          </div>
+          {/* {mail.treatmentCourse!.map((item, index) => {
+
+          })} */}
           <Separator className="mt-auto" />
           <div className="p-4">
             {/* <form> */}
@@ -306,6 +329,6 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
           No message selected
         </div>
       )}
-    </div>)
+    </div>
   );
 }

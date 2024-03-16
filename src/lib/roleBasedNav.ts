@@ -40,12 +40,12 @@ export const userNav = [
     icon: Archive,
     variant: "ghost",
   },
-  {
-    title: "Archive",
-    href: "/dashboard/archive",
-    icon: Archive,
-    variant: "ghost",
-  },
+  // {
+  //   title: "Archive",
+  //   href: "/dashboard/archive",
+  //   icon: Archive,
+  //   variant: "ghost",
+  // },
 ];
 
 // [
