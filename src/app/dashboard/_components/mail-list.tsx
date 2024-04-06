@@ -25,9 +25,17 @@ interface MailListProps {
   items: DataProps;
   handleRecordClick: (data: string, type: string) => void;
   tabs: String;
+  role: String;
+  walletAddress: String;
 }
 
-export function MailList({ items, handleRecordClick, tabs }: MailListProps) {
+export function MailList({
+  items,
+  handleRecordClick,
+  tabs,
+  role,
+  walletAddress,
+}: MailListProps) {
   // const [currentItems, setCurrentItems] = React.setState(items);
   const [mail, setMail] = useMail();
   const [currentItems, setCurrentItems] = useState<DataProps>();
@@ -35,19 +43,44 @@ export function MailList({ items, handleRecordClick, tabs }: MailListProps) {
   useEffect(() => {
     const getCurrentData = async () => {};
     console.log("tabs", tabs);
-
+    console.log(role);
     switch (tabs) {
       case "Current":
-        console.log("current items", items[0]);
+        if (role === '"DOCTOR"') {
+          console.log("inside if");
+          const newItems = items.filter((item) => {
+            console.log(item[0]);
+            return item[0] === walletAddress;
+          });
+          console.log("useEffect newItems", newItems);
+          setCurrentItems((prev) => [...newItems]);
+        } else {
+          console.log("inside else");
+          const newItems = items.filter((item) => {
+            return item[1] === walletAddress;
+          });
+          console.log("useEffect newItems", newItems);
+          setCurrentItems((prev) => [...newItems]);
+        }
+        break;
       case "Approved":
-        console.log("current items", items[0]);
-    }
-  }, [tabs]);
+        console.log("inside approved case");
+        const newItems = items.filter((item) => item[2] === walletAddress);
+        setCurrentItems(newItems);
+        break;
 
+      default:
+        console.log("deafault");
+    }
+    // console.log("item content", typeof items[0][0]);
+    // const newItems = items.filter((item) => item[0] === walletAddress);
+    // setCurrentItems(newItems);
+  }, [tabs]);
+  console.log("current items", currentItems);
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
-        {items.map((item, index) => (
+        {currentItems?.map((item, index) => (
           <button
             key={index}
             className={cn(

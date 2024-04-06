@@ -7,12 +7,12 @@ export const DoctorNav = [
     icon: Inbox,
     variant: "default",
   },
-  {
-    title: "Pending",
-    href: "/dashboard/pending",
-    icon: Send,
-    variant: "ghost",
-  },
+  // {
+  //   title: "Pending",
+  //   href: "/dashboard/pending",
+  //   icon: Send,
+  //   variant: "ghost",
+  // },
   // {
   //   title: "Archive",
   //   href: "/dashboard/archive",

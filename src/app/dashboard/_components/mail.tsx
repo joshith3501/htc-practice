@@ -124,12 +124,12 @@ export function Mail({
 
       setCurrentType("approvals");
     } else {
-      //define data as above 
+      //define data as above
       setCurrentMail(data);
     }
   };
 
-  const getTabs = (tab: string) => {
+  const getTabs = () => {
     return (
       <Tabs defaultValue="all">
         <div className="flex items-center px-4 py-2">
@@ -159,7 +159,13 @@ export function Mail({
           </form>
         </div> */}
         <TabsContent value="all" className="m-0">
-          <MailList items={mails} tabs={status} handleRecordClick={handleMailRecordClick} />
+          <MailList
+            items={mails}
+            tabs={status}
+            handleRecordClick={handleMailRecordClick}
+            role={role}
+            walletAddress={walletAddress}
+          />
         </TabsContent>
         {/* <TabsContent value="unread" className="m-0">
           <MailList items={mails.filter((item) => !item.read)} />
@@ -171,15 +177,13 @@ export function Mail({
   const getComponent = () => {
     switch (status) {
       case "Current":
-        return getTabs("current");
+        return getTabs();
       case "Approvals":
         return <UserApprovalsTab handleRecordClick={handleMailRecordClick} />;
       case "Approved":
-        return <Tabs>Approved</Tabs>;
-      case "Archive":
-        return <Tabs>Archives</Tabs>;
+        return getTabs();
       case "Pending":
-        return <Tabs>Pending</Tabs>
+        return <UserApprovalsTab handleRecordClick={handleMailRecordClick} />;
       default:
         return null;
     }
@@ -319,7 +323,7 @@ export function Mail({
             handleNavClicks={handleNavLink}
           />
           <Separator />
-          <Nav
+          {/* <Nav
             isCollapsed={isCollapsed}
             links={[
               {
@@ -329,7 +333,7 @@ export function Mail({
                 variant: "ghost",
               },
             ]}
-          />
+          /> */}
           {/* <Link href="/dashboard/global" buttonVariant({variant: "ghost"})>global</Link> */}
         </ResizablePanel>
         <ResizableHandle withHandle />
@@ -341,7 +345,11 @@ export function Mail({
           {/* <MailDisplay
             mail={mails.find((item) => item.id === mail.selected) || null}
           /> */}
-          <MailDisplay mail={currentMail || null} currentType={currentType}/>
+          <MailDisplay
+            mail={currentMail || null}
+            currentType={currentType}
+            role={role}
+          />
         </ResizablePanel>
         {/* <Button>Accept</Button> */}
       </ResizablePanelGroup>

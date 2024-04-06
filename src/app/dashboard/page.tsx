@@ -102,7 +102,7 @@ export default function MailPage() {
 
     if (loggedInAddress) {
       if (address !== loggedInAddress) {
-        setError(address + " " + loggedInAddress);
+        setError("Login with wallet connected to your account");
         return;
       }
     }
@@ -128,7 +128,7 @@ export default function MailPage() {
 
       const transactions = await treatmentContract.getTreatments();
 
-      console.log(transactions);
+      // console.log(transactions);
 
       return transactions;
     };
@@ -146,8 +146,7 @@ export default function MailPage() {
     handleFetchData();
   }, []);
 
-
-  console.log(data);
+  // console.log(data);
 
   return (
     <>
@@ -186,7 +185,13 @@ export default function MailPage() {
             navCollapsedSize={4}
           />
         ) : (
-          <RingLoader color="#36D7B7" size={150} />
+          <div className="w-screen h-screen relative">
+            <RingLoader
+              color="#36D7B7"
+              size={50}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            />
+          </div>
         )}
       </div>
     </>

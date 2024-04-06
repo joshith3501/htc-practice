@@ -63,9 +63,10 @@ interface IMail {
 interface MailDisplayProps {
   mail: IMail | null;
   currentType: string;
+  role: String;
 }
 
-export function MailDisplay({ mail, currentType }: MailDisplayProps) {
+export function MailDisplay({ mail, currentType, role }: MailDisplayProps) {
   const today = new Date();
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
@@ -88,9 +89,9 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
     const transactionContract = await getEthereumContract(signerAddress);
 
     const transactionHash = await transactionContract.recordTreatment(
-      signerAddress,
+      mail?.email,
       mail?.name,
-      mail?.subject,
+      signerAddress,
       mail?.treatmentTitle,
       mail?.text,
       mail?.treatmentCourse
@@ -310,7 +311,7 @@ export function MailDisplay({ mail, currentType }: MailDisplayProps) {
                     <Switch id="mute" aria-label="Mute thread" /> Mute this
                     thread
                   </Label> */}
-                {currentType === "approvals" && (
+                {currentType === "approvals" && role==='"USER"' && (
                   <Button
                     onClick={(e) => handleSend()}
                     size="sm"

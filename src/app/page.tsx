@@ -9,6 +9,8 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
 import { FaHeartPulse } from "react-icons/fa6";
 import { LoginButton } from "@/components/auth/login-button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 // import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -27,16 +29,20 @@ export default function Home() {
           <div className={styles.resource}>Resource</div>
           <div className={styles.ourWork}>Our Work</div>
         </div>
-        <div className={styles.buttons}>
-          <div className={styles.mode}>
-            <ModeToggle />
-          </div>
-          <div className={styles.getStarted}>
-            <button>
-              <span>Get Started</span> <FaArrowRightLong />
-            </button>
-          </div>
-        </div>
+        {/* <div className={styles.buttons}> */}
+        {/* <div className={styles.mode}><ModeToggle /></div> */}
+        {/* <div className={styles.getStarted}> */}
+        <Link
+          href="/auth/login"
+          className={cn(
+            buttonVariants({ variant: "default", size: "icon" }),
+            "w-[80px]"
+          )}
+        >
+          Sign In
+        </Link>
+        {/* </div> */}
+        {/* </div> */}
       </header>
       <div className={styles.intro}>
         <div className={styles.about}>
@@ -47,12 +53,21 @@ export default function Home() {
             <span>Health Care System, Revolutionized</span>
           </div>
           <div className={styles.caseStudy}>
-            <LoginButton>
+            {/* <LoginButton>
               <button>
                 <span>Sign In</span>
                 <FaArrowRightLong />
               </button>
-            </LoginButton>
+            </LoginButton> */}
+            <Link
+              href="/auth/register"
+              className={cn(
+                buttonVariants({ variant: "default", size: "icon" }),
+                "w-[180px]"
+              )}
+            >
+              Register Now!
+            </Link>
           </div>
         </div>
         <div className={styles.introImg}>
@@ -65,7 +80,7 @@ export default function Home() {
           ></Image>
         </div>
       </div>
-
+      {/* 
       <div className={styles.userCards}>
         <div className={styles.patient}>
           <div className={styles.cardLogo}>
@@ -111,8 +126,8 @@ export default function Home() {
               <button>Hospital</button>
             </Link>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </main>
   );
 }
